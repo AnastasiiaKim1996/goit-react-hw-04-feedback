@@ -1,4 +1,3 @@
-import React, { Component } from 'react';
 import { Feedback } from './Feedback';
 
 export const App = () => {

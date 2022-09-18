@@ -1,8 +1,8 @@
 import { Component } from 'react';
 
-// import { Section } from './Section/Section';
-// import { Statistics } from './Statistics/Statistics';
-// import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
+import { Section } from './Section/Section';
+import { Statistics } from './Statistics/Statistics';
+import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
 
 export class Feedback extends Component {
   state = {
@@ -31,20 +31,38 @@ export class Feedback extends Component {
 
   render() {
     const { good, neutral, bad } = this.state;
+    const totalFeedback = this.countTotalFeedback();
+    const positivePercentage = this.countPositiveFeedbackPercentage();
     return (
       <>
-        <h2>Please leave feedback</h2>
-        <button onClick={() => this.addFeedback('good')}>good</button>
+        <Section title="Please leave feedback">
+          <FeedbackOptions
+            options={Object.keys(this.state)}
+            onLeaveFeedback={this.addFeedback}
+          />
+        </Section>
+
+        <Section title="Statistics">
+          <Statistics
+            good={good}
+            neutral={neutral}
+            bad={bad}
+            total={totalFeedback}
+            positivePercentage={positivePercentage}
+          />
+        </Section>
+
+        {/* <button onClick={() => this.addFeedback('good')}>good</button>
         <button onClick={() => this.addFeedback('neutral')}>neutral</button>
-        <button onClick={() => this.addFeedback('bad')}>bad</button>
-        <h2>Statistics</h2>
-        <ul>
+        <button onClick={() => this.addFeedback('bad')}>bad</button> */}
+
+        {/* <ul>
           <li>good {good}</li>
           <li>neutral {neutral}</li>
           <li>bad {bad}</li>
           <li>total {}</li>
           <li>Positive feedback {}</li>
-        </ul>
+        </ul> */}
       </>
     );
   }
