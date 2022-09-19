@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import { Container, Logo } from './Container/Container';
 
 import { Section } from 'components/Section/Section';
 import { FeedbackOptions } from 'components/Feedback/FeedbackOptions';
@@ -13,9 +13,16 @@ export class Feedback extends Component {
     bad: 0,
   };
 
+  addFeedback = number => {
+    this.setState(prevState => {
+      const value = prevState[number];
+      return {
+        [number]: value + 1,
+      };
+    });
+  };
   countTotalFeedback = () => {
     const { good, neutral, bad } = this.state;
-
     return good + neutral + bad;
   };
 
@@ -24,43 +31,41 @@ export class Feedback extends Component {
       ? Math.floor((this.state.good * 100) / this.countTotalFeedback())
       : 0;
 
-  addFeedback = name => {
-    this.setState(prevState => {
-      return { [name]: prevState[name] + 1 };
-    });
-  };
-
   render() {
     const { good, neutral, bad } = this.state;
-
+    const totalFeedback = this.countTotalFeedback();
+    const positivePercentage = this.countPositiveFeedbackPercentage();
     return (
-      <Wrapper>
+      <Container>
+        <div>
+          <Logo
+            src="https://papik.pro/uploads/posts/2021-11/1636132436_1-papik-pro-p-kofe-logotip-foto-1.jpg"
+            alt=""
+            width="80"
+            height="80"
+          ></Logo>
+        </div>
         <Section title="Please leave feedback">
           <FeedbackOptions
-            options={Object.keys(this.state)}
+            options={['good', 'neutral', 'bad']}
             onLeaveFeedback={this.addFeedback}
           />
         </Section>
 
         <Section title="Statistic">
-          {this.countTotalFeedback() ? (
+          {totalFeedback ? (
             <Statistics
               good={good}
               neutral={neutral}
               bad={bad}
-              total={this.countTotalFeedback()}
-              positivePercentage={this.countPositiveFeedbackPercentage()}
+              total={totalFeedback}
+              positivePercentage={positivePercentage}
             />
           ) : (
             <Notification message="There is no feedback 🙄" />
           )}
         </Section>
-      </Wrapper>
+      </Container>
     );
   }
 }
-
-const Wrapper = styled.div`
-  padding-top: 130px;
-  padding-left: 300px;
-`;
