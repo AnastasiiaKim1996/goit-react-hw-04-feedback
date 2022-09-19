@@ -1,8 +1,10 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
+import styled from 'styled-components';
 
-import { Section } from './Section/Section';
-import { Statistics } from './Statistics/Statistics';
-import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
+import { Section } from 'components/Section/Section';
+import { FeedbackOptions } from 'components/Feedback/FeedbackOptions';
+import { Statistics } from 'components/Statistics/Statistics';
+import { Notification } from 'components/Notification/Notification';
 
 export class Feedback extends Component {
   state = {
@@ -11,16 +13,9 @@ export class Feedback extends Component {
     bad: 0,
   };
 
-  addFeedback = number => {
-    this.setState(prevState => {
-      const value = prevState[number];
-      return {
-        [number]: value + 1,
-      };
-    });
-  };
   countTotalFeedback = () => {
     const { good, neutral, bad } = this.state;
+
     return good + neutral + bad;
   };
 
@@ -29,12 +24,17 @@ export class Feedback extends Component {
       ? Math.floor((this.state.good * 100) / this.countTotalFeedback())
       : 0;
 
+  addFeedback = name => {
+    this.setState(prevState => {
+      return { [name]: prevState[name] + 1 };
+    });
+  };
+
   render() {
     const { good, neutral, bad } = this.state;
-    const totalFeedback = this.countTotalFeedback();
-    const positivePercentage = this.countPositiveFeedbackPercentage();
+
     return (
-      <>
+      <Wrapper>
         <Section title="Please leave feedback">
           <FeedbackOptions
             options={Object.keys(this.state)}
@@ -42,28 +42,25 @@ export class Feedback extends Component {
           />
         </Section>
 
-        <Section title="Statistics">
-          <Statistics
-            good={good}
-            neutral={neutral}
-            bad={bad}
-            total={totalFeedback}
-            positivePercentage={positivePercentage}
-          />
+        <Section title="Statistic">
+          {this.countTotalFeedback() ? (
+            <Statistics
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              total={this.countTotalFeedback()}
+              positivePercentage={this.countPositiveFeedbackPercentage()}
+            />
+          ) : (
+            <Notification message="There is no feedback 🙄" />
+          )}
         </Section>
-
-        {/* <button onClick={() => this.addFeedback('good')}>good</button>
-        <button onClick={() => this.addFeedback('neutral')}>neutral</button>
-        <button onClick={() => this.addFeedback('bad')}>bad</button> */}
-
-        {/* <ul>
-          <li>good {good}</li>
-          <li>neutral {neutral}</li>
-          <li>bad {bad}</li>
-          <li>total {}</li>
-          <li>Positive feedback {}</li>
-        </ul> */}
-      </>
+      </Wrapper>
     );
   }
 }
+
+const Wrapper = styled.div`
+  padding-top: 130px;
+  padding-left: 300px;
+`;
