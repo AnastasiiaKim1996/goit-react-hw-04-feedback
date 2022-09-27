@@ -4,8 +4,8 @@ export const Container = styled.section`
 display: flex;
 flex-direction: column;
 flex-wrap: wrap;
-padding-top: 70px;
-padding-left: 80px;
+padding-top: 40px;
+padding-left: 40px;
 text-align: center
 align-items: center;
 `;
